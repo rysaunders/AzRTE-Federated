@@ -34,6 +34,5 @@
              --container-name flag \
              --name flag.txt \
              --file flag.txt \
-             --auth-mode login \
+             --auth-mode login
            cat flag.txt
-~
