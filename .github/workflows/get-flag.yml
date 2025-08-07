@@ -1,0 +1,46 @@
+ name: Retrieve Flag from Azure
+
+ on:
+   workflow_dispatch:
+
+ permissions:
+   id-token: write
+   contents: read
+
+ env:
+   STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT }}
+   RESOURCE_GROUP: your-rg-name
+   MANAGED_IDENTITY: your-uami-name
+
+ jobs:
+   download-flag:
+     runs-on: ubuntu-latest
+
+     steps:
+       - name: Checkout (optional)
+         uses: actions/checkout@v4
+
+       - name: Login to Azure with OIDC
+         uses: azure/login@v1
+         with:
+           client-id: ${{ secrets.CLIENT_ID }}
+           tenant-id: ${{ secrets.TENANT_ID }}
+           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+
+       - name: Set Connection String
+         run: |
+           CONNECTION_STRING=$(az storage account show-connection-string \
+             --name "$STORAGE_ACCOUNT" \
+             --query connectionString -o tsv)
+           echo "CONNECTION_STRING=$CONNECTION_STRING" >> $GITHUB_ENV
+
+       - name: Download flag
+         run: |
+           az storage blob download \
+             --account-name "$STORAGE_ACCOUNT" \
+             --container-name flag \
+             --name flag.txt \
+             --file flag.txt \
+             --auth-mode login \
+           cat flag.txt
+~
