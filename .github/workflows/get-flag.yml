@@ -9,8 +9,6 @@
 
  env:
    STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT }}
-   RESOURCE_GROUP: your-rg-name
-   MANAGED_IDENTITY: your-uami-name
 
  jobs:
    download-flag:
@@ -30,7 +28,7 @@
        - name: Download flag
          run: |
            az storage blob download \
-             --account-name "$STORAGE_ACCOUNT" \
+             --account-name $STORAGE_ACCOUNT \
              --container-name flag \
              --name flag.txt \
              --file flag.txt \
