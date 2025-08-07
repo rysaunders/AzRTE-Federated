@@ -27,13 +27,6 @@
            tenant-id: ${{ secrets.TENANT_ID }}
            subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
 
-       - name: Set Connection String
-         run: |
-           CONNECTION_STRING=$(az storage account show-connection-string \
-             --name "$STORAGE_ACCOUNT" \
-             --query connectionString -o tsv)
-           echo "CONNECTION_STRING=$CONNECTION_STRING" >> $GITHUB_ENV
-
        - name: Download flag
          run: |
            az storage blob download \
